@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DailyDrinks - Deine Cocktail App</title>
+    <style>
+        :root {
+            /* Light Theme */
+            --primary-bg: #f8f9fa;
+            --secondary-bg: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b7280;
+            --accent: #007AFF;
+            --accent-hover: #0056CC;
+            --border: rgba(0, 0, 0, 0.1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --backdrop-blur: blur(20px);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme */
+            --primary-bg: #000000;
+            --secondary-bg: #1c1c1e;
+            --glass-bg: rgba(28, 28, 30, 0.7);
+            --text-primary: #ffffff;
+            --text-secondary: #98989d;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--secondary-bg);
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        /* Header */
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--glass-bg);
+        }
+
+        /* Content Area */
+        .content {
+            padding: 1rem;
+            padding-bottom: 6rem;
+            min-height: calc(100vh - 140px);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Drink Cards */
+        .drink-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .drink-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .drink-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .drink-info {
+            padding: 1rem;
+        }
+
+        .drink-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .drink-category {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .drink-instructions {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .favorite-btn.active {
+            color: #ff3b30;
+        }
+
+        /* Search */
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border-top: 1px solid var(--border);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 10px;
+            min-width: 60px;
+        }
+
+        .nav-item:hover {
+            background: var(--glass-bg);
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 1.5rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), #ff3b30);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .refresh-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Grid Layout */
+        .drinks-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .header {
+                padding: 0.75rem;
+            }
+            
+            .content {
+                padding: 0.75rem;
+                padding-bottom: 6rem;
+            }
+            
+            .hero-title {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--secondary-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .ingredients-list {
+            margin: 1rem 0;
+        }
+
+        .ingredient-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1>DailyDrinks</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </header>
+
+        <!-- Content -->
+        <main class="content">
+            <!-- Home Tab -->
+            <div class="tab-content active" id="home-tab">
+                <div class="hero-section">
+                    <h2 class="hero-title">Drink des Tages</h2>
+                    <p class="hero-subtitle">Entdecke jeden Tag einen neuen Cocktail</p>
+                    <button class="refresh-btn" onclick="loadRandomDrink()">Neuen Drink laden</button>
+                </div>
+                <div id="daily-drink-container">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Lade Cocktail...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Tab -->
+            <div class="tab-content" id="search-tab">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Cocktail suchen..." id="search-input">
+                </div>
+                <div id="search-results" class="drinks-grid">
+                    <div class="empty-state">
+                        <div class="empty-icon">🔍</div>
+                        <p>Suche nach deinem Lieblings-Cocktail</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Favorites Tab -->
+            <div class="tab-content" id="favorites-tab">
+                <div id="favorites-container" class="drinks-grid">
+                    <div class="empty-state">
+                        <div class="empty-icon">⭐</div>
+                        <p>Noch keine Favoriten gespeichert</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div class="tab-content" id="profile-tab">
+                <div class="empty-state">
+                    <div class="empty-icon">⚙️</div>
+                    <p>Profil-Features kommen bald</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="switchTab('home')">
+                <div class="nav-icon">🍹</div>
+                <div class="nav-label">Heute</div>
+            </div>
+            <div class="nav-item" onclick="switchTab('search')">
+                <div class="nav-icon">🔍</div>
+                <div class="nav-label">Suchen</div>
+            </div>
+            <div class="nav-item" onclick="switchTab('favorites')">
+                <div class="nav-icon">⭐</div>
+                <div class="nav-label">Favoriten</div>
+            </div>
+            <div class="nav-item" onclick="switchTab('profile')">
+                <div class="nav-icon">⚙️</div>
+                <div class="nav-label">Profil</div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Drink Detail Modal -->
+    <div class="modal" id="drink-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeDrinkModal()">✕</button>
+            <div id="modal-drink-details"></div>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        const AppState = {
+            currentTab: 'home',
+            favorites: JSON.parse(localStorage.getItem('dailydrinks-favorites') || '[]'),
+            currentDrink: null,
+            searchResults: [],
+            theme: localStorage.getItem('dailydrinks-theme') || 'light'
+        };
+
+        // API Service
+        class CocktailService {
+            static baseUrl = 'https://www.thecocktaildb.com/api/json/v1/1';
+
+            static async getRandomDrink() {
+                try {
+                    const response = await fetch(`${this.baseUrl}/random.php`);
+                    const data = await response.json();
+                    return data.drinks[0];
+                } catch (error) {
+                    console.error('Error fetching random drink:', error);
+                    return null;
+                }
+            }
+
+            static async searchDrinks(query) {
+                if (!query.trim()) return [];
+                try {
+                    const response = await fetch(`${this.baseUrl}/search.php?s=${encodeURIComponent(query)}`);
+                    const data = await response.json();
+                    return data.drinks || [];
+                } catch (error) {
+                    console.error('Error searching drinks:', error);
+                    return [];
+                }
+            }
+
+            static async getDrinkById(id) {
+                try {
+                    const response = await fetch(`${this.baseUrl}/lookup.php?i=${id}`);
+                    const data = await response.json();
+                    return data.drinks[0];
+                } catch (error) {
+                    console.error('Error fetching drink by ID:', error);
+                    return null;
+                }
+            }
+        }
+
+        // Utility Functions
+        function formatDrink(drink) {
+            const ingredients = [];
+            for (let i = 1; i <= 15; i++) {
+                const ingredient = drink[`strIngredient${i}`];
+                const measure = drink[`strMeasure${i}`];
+                if (ingredient && ingredient.trim()) {
+                    ingredients.push({
+                        name: ingredient.trim(),
+                        measure: measure ? measure.trim() : ''
+                    });
+                }
+            }
+
+            return {
+                id: drink.idDrink,
+                name: drink.strDrink,
+                image: drink.strDrinkThumb,
+                category: drink.strCategory,
+                alcoholic: drink.strAlcoholic,
+                glass: drink.strGlass,
+                instructions: drink.strInstructions,
+                ingredients: ingredients
+            };
+        }
+
+        function isFavorite(drinkId) {
+            return AppState.favorites.some(fav => fav.id === drinkId);
+        }
+
+        function toggleFavorite(drink) {
+            const index = AppState.favorites.findIndex(fav => fav.id === drink.id);
+            if (index === -1) {
+                AppState.favorites.push(drink);
+            } else {
+                AppState.favorites.splice(index, 1);
+            }
+            saveFavorites();
+            updateFavoriteButtons();
+            if (AppState.currentTab === 'favorites') {
+                renderFavorites();
+            }
+        }
+
+        function saveFavorites() {
+            localStorage.setItem('dailydrinks-favorites', JSON.stringify(AppState.favorites));
+        }
+
+        function updateFavoriteButtons() {
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                const drinkId = btn.dataset.drinkId;
+                btn.classList.toggle('active', isFavorite(drinkId));
+                btn.innerHTML = isFavorite(drinkId) ? '❤️' : '🤍';
+            });
+        }
+
+        // Rendering Functions
+        function createDrinkCard(drink) {
+            const isFav = isFavorite(drink.id);
+            return `
+                <div class="drink-card" onclick="showDrinkDetails('${drink.id}')">
+                    <img src="${drink.image}" alt="${drink.name}" class="drink-image" loading="lazy">
+                    <button class="favorite-btn ${isFav ? 'active' : ''}" 
+                            data-drink-id="${drink.id}" 
+                            onclick="event.stopPropagation(); toggleFavorite(${JSON.stringify(drink).replace(/"/g, '&quot;')})">
+                        ${isFav ? '❤️' : '🤍'}
+                    </button>
+                    <div class="drink-info">
+                        <h3 class="drink-name">${drink.name}</h3>
+                        <p class="drink-category">${drink.category} • ${drink.alcoholic}</p>
+                        <p class="drink-instructions">${drink.instructions}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDailyDrink(drink) {
+            const container = document.getElementById('daily-drink-container');
+            if (drink) {
+                container.innerHTML = createDrinkCard(drink);
+                AppState.currentDrink = drink;
+            } else {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">😔</div>
+                        <p>Cocktail konnte nicht geladen werden</p>
+                        <button class="refresh-btn" onclick="loadRandomDrink()">Erneut versuchen</button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderSearchResults(drinks) {
+            const container = document.getElementById('search-results');
+            if (drinks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">😔</div>
+                        <p>Keine Cocktails gefunden</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = drinks.map(drink => createDrinkCard(drink)).join('');
+            }
+        }
+
+        function renderFavorites() {
+            const container = document.getElementById('favorites-container');
+            if (AppState.favorites.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⭐</div>
+                        <p>Noch keine Favoriten gespeichert</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = AppState.favorites.map(drink => createDrinkCard(drink)).join('');
+            }
+        }
+
+        // Tab Navigation
+        function switchTab(tabName) {
+            // Update active tab
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('active');
+            });
+
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+
+            AppState.currentTab = tabName;
+
+            // Load content for specific tabs
+            if (tabName === 'favorites') {
+                renderFavorites();
+            }
+        }
+
+        // Load Random Drink
+        async function loadRandomDrink() {
+            const container = document.getElementById('daily-drink-container');
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Lade neuen Cocktail...
+                </div>
+            `;
+
+            const rawDrink = await CocktailService.getRandomDrink();
+            if (rawDrink) {
+                const drink = formatDrink(rawDrink);
+                renderDailyDrink(drink);
+            } else {
+                renderDailyDrink(null);
+            }
+        }
+
+        // Search Functionality
+        let searchTimeout;
+        function setupSearch() {
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                const query = e.target.value.trim();
+                
+                if (query.length === 0) {
+                    document.getElementById('search-results').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🔍</div>
+                            <p>Suche nach deinem Lieblings-Cocktail</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                searchTimeout = setTimeout(async () => {
+                    document.getElementById('search-results').innerHTML = `
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            Suche läuft...
+                        </div>
+                    `;
+
+                    const rawDrinks = await CocktailService.searchDrinks(query);
+                    const drinks = rawDrinks.map(drink => formatDrink(drink));
+                    AppState.searchResults = drinks;
+                    renderSearchResults(drinks);
+                }, 300);
+            });
+        }
+
+        // Drink Detail Modal
+        async function showDrinkDetails(drinkId) {
+            const modal = document.getElementById('drink-modal');
+            const detailsContainer = document.getElementById('modal-drink-details');
+            
+            modal.classList.add('active');
+            detailsContainer.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Lade Details...
+                </div>
+            `;
+
+            const rawDrink = await CocktailService.getDrinkById(drinkId);
+            if (rawDrink) {
+                const drink = formatDrink(rawDrink);
+                const isFav = isFavorite(drink.id);
+                
+                detailsContainer.innerHTML = `
+                    <img src="${drink.image}" alt="${drink.name}" style="width: 100%; border-radius: 15px; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h2>${drink.name}</h2>
+                        <button class="favorite-btn ${isFav ? 'active' : ''}" 
+                                data-drink-id="${drink.id}" 
+                                onclick="toggleFavorite(${JSON.stringify(drink).replace(/"/g, '&quot;')})">
+                            ${isFav ? '❤️' : '🤍'}
+                        </button>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">${drink.category} • ${drink.alcoholic} • ${drink.glass}</p>
+                    
+                    <h3 style="margin-bottom: 0.5rem;">Zutaten:</h3>
+                    <div class="ingredients-list">
+                        ${drink.ingredients.map(ing => `
+                            <div class="ingredient-item">
+                                <span>${ing.name}</span>
+                                <span>${ing.measure}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <h3 style="margin: 1rem 0 0.5rem 0;">Zubereitung:</h3>
+                    <p style="line-height: 1.6;">${drink.instructions}</p>
+                `;
+            }
+        }
+
+        function closeDrinkModal() {
+            document.getElementById('drink-modal').classList.remove('active');
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            document.querySelector('.theme-toggle').innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
+            
+            AppState.theme = newTheme;
+            localStorage.setItem('dailydrinks-theme', newTheme);
+        }
+
+        // Initialize App
+        function initApp() {
+            // Set initial theme
+            document.documentElement.setAttribute('data-theme', AppState.theme);
+            document.querySelector('.theme-toggle').innerHTML = AppState.theme === 'dark' ? '☀️' : '🌙';
+            
+            // Setup search
+            setupSearch();
+            
+            // Load initial data
+            loadRandomDrink();
+            
+            // Close modal on outside click
+            document.getElementById('drink-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'drink-modal') {
+                    closeDrinkModal();
+                }
+            });
+        }
+
+        // Start the app
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
