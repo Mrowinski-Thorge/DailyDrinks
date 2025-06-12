@@ -64,11 +64,12 @@
             backdrop-filter: var(--backdrop-blur);
             padding: 1rem;
             position: sticky;
-            top: 0;
+            top: 0.5rem;
             z-index: 100;
             border-bottom: 1px solid var(--border);
-            border-radius: 0 0 25px 25px;
-            margin: 0 0.5rem;
+            border-radius: 25px;
+            margin: 0.5rem;
+            box-shadow: var(--shadow);
         }
 
         .header h1 {
@@ -98,7 +99,8 @@
         /* Content Area */
         .content {
             padding: 1rem;
-            padding-bottom: 6rem;
+            padding-bottom: 7rem;
+            padding-top: 0.5rem;
             min-height: calc(100vh - 140px);
         }
 
@@ -232,15 +234,21 @@
             border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            padding: 0.25rem;
+            padding: 0.5rem;
             margin-left: 0.5rem;
             border-radius: 50%;
             transition: all 0.3s ease;
             display: none;
+            font-size: 1.2rem;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .search-clear.visible {
-            display: block;
+            display: flex;
         }
 
         .search-clear:hover {
@@ -250,11 +258,11 @@
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
+            bottom: 0.5rem;
             left: 50%;
             transform: translateX(-50%);
-            width: 100%;
-            max-width: 430px;
+            width: calc(100% - 1rem);
+            max-width: 420px;
             background: var(--nav-bg);
             backdrop-filter: var(--backdrop-blur);
             border-top: 1px solid var(--border);
@@ -262,8 +270,8 @@
             display: flex;
             justify-content: space-around;
             z-index: 100;
-            border-radius: 25px 25px 0 0;
-            margin: 0 0.5rem;
+            border-radius: 25px;
+            box-shadow: var(--shadow);
         }
 
         .nav-item {
@@ -334,51 +342,6 @@
             color: var(--text-secondary);
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
-        }
-
-        /* Language Settings */
-        .language-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .language-option {
-            background: var(--glass-strong);
-            backdrop-filter: var(--backdrop-blur);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .language-option:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .language-option.active {
-            border-color: var(--accent);
-            background: var(--accent);
-            color: white;
-        }
-
-        .language-flag {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .language-name {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .profile-section {
-            margin-bottom: 2rem;
         }
 
         .profile-title {
@@ -498,13 +461,13 @@
             <!-- Home Tab -->
             <div class="tab-content active" id="home-tab">
                 <div class="hero-section">
-                    <h2 class="hero-title">Drink des Tages</h2>
-                    <p class="hero-subtitle">Entdecke jeden Tag einen neuen Cocktail</p>
+                    <h2 class="hero-title">Drink of the Day</h2>
+                    <p class="hero-subtitle">Discover a new cocktail every day</p>
                 </div>
                 <div id="daily-drink-container">
                     <div class="loading">
                         <div class="spinner"></div>
-                        Lade Cocktail...
+                        Loading cocktail...
                     </div>
                 </div>
             </div>
@@ -514,14 +477,14 @@
                 <div class="search-container">
                     <div class="search-wrapper">
                         <span class="search-icon">🔍</span>
-                        <input type="text" class="search-input" placeholder="Cocktail suchen..." id="search-input">
+                        <input type="text" class="search-input" placeholder="Search cocktails..." id="search-input">
                         <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
                     </div>
                 </div>
                 <div id="search-results" class="drinks-grid">
                     <div class="empty-state">
                         <div class="empty-icon">🔍</div>
-                        <p>Suche nach deinem Lieblings-Cocktail</p>
+                        <p>Search for your favorite cocktail</p>
                     </div>
                 </div>
             </div>
@@ -531,7 +494,7 @@
                 <div id="favorites-container" class="drinks-grid">
                     <div class="empty-state">
                         <div class="empty-icon">⭐</div>
-                        <p>Noch keine Favoriten gespeichert</p>
+                        <p>No favorites saved yet</p>
                     </div>
                 </div>
             </div>
@@ -539,40 +502,10 @@
             <!-- Profile Tab -->
             <div class="tab-content" id="profile-tab">
                 <div class="profile-section">
-                    <h3 class="profile-title">🌍 Sprache</h3>
-                    <div class="language-grid">
-                        <div class="language-option active" onclick="setLanguage('de')">
-                            <span class="language-flag">🇩🇪</span>
-                            <div class="language-name">Deutsch</div>
-                        </div>
-                        <div class="language-option" onclick="setLanguage('en')">
-                            <span class="language-flag">🇺🇸</span>
-                            <div class="language-name">English</div>
-                        </div>
-                        <div class="language-option" onclick="setLanguage('es')">
-                            <span class="language-flag">🇪🇸</span>
-                            <div class="language-name">Español</div>
-                        </div>
-                        <div class="language-option" onclick="setLanguage('fr')">
-                            <span class="language-flag">🇫🇷</span>
-                            <div class="language-name">Français</div>
-                        </div>
-                        <div class="language-option" onclick="setLanguage('it')">
-                            <span class="language-flag">🇮🇹</span>
-                            <div class="language-name">Italiano</div>
-                        </div>
-                        <div class="language-option" onclick="setLanguage('pt')">
-                            <span class="language-flag">🇵🇹</span>
-                            <div class="language-name">Português</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="profile-section">
-                    <h3 class="profile-title">⚙️ Einstellungen</h3>
+                    <h3 class="profile-title">⚙️ Settings</h3>
                     <div class="empty-state">
                         <div class="empty-icon">🚧</div>
-                        <p>Weitere Features kommen bald</p>
+                        <p>More features coming soon</p>
                     </div>
                 </div>
             </div>
@@ -582,19 +515,19 @@
         <nav class="bottom-nav">
             <div class="nav-item active" onclick="switchTab('home')">
                 <div class="nav-icon">🍹</div>
-                <div class="nav-label">Heute</div>
+                <div class="nav-label">Today</div>
             </div>
             <div class="nav-item" onclick="switchTab('search')">
                 <div class="nav-icon">🔍</div>
-                <div class="nav-label">Suchen</div>
+                <div class="nav-label">Search</div>
             </div>
             <div class="nav-item" onclick="switchTab('favorites')">
                 <div class="nav-icon">⭐</div>
-                <div class="nav-label">Favoriten</div>
+                <div class="nav-label">Favorites</div>
             </div>
             <div class="nav-item" onclick="switchTab('profile')">
                 <div class="nav-icon">⚙️</div>
-                <div class="nav-label">Profil</div>
+                <div class="nav-label">Settings</div>
             </div>
         </nav>
     </div>
@@ -615,7 +548,6 @@
             currentDrink: null,
             searchResults: [],
             theme: localStorage.getItem('dailydrinks-theme') || 'light',
-            language: localStorage.getItem('dailydrinks-language') || 'de',
             dailyDrink: JSON.parse(localStorage.getItem('dailydrinks-daily') || 'null'),
             dailyDrinkDate: localStorage.getItem('dailydrinks-daily-date') || ''
         };
@@ -744,7 +676,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">😔</div>
-                        <p>Cocktail konnte nicht geladen werden</p>
+                        <p>Cocktail could not be loaded</p>
                     </div>
                 `;
             }
@@ -756,7 +688,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">😔</div>
-                        <p>Keine Cocktails gefunden</p>
+                        <p>No cocktails found</p>
                     </div>
                 `;
             } else {
@@ -770,7 +702,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">⭐</div>
-                        <p>Noch keine Favoriten gespeichert</p>
+                        <p>No favorites saved yet</p>
                     </div>
                 `;
             } else {
@@ -813,7 +745,7 @@
             container.innerHTML = `
                 <div class="loading">
                     <div class="spinner"></div>
-                    Lade Cocktail des Tages...
+                    Loading drink of the day...
                 </div>
             `;
 
@@ -850,7 +782,7 @@
                     document.getElementById('search-results').innerHTML = `
                         <div class="empty-state">
                             <div class="empty-icon">🔍</div>
-                            <p>Suche nach deinem Lieblings-Cocktail</p>
+                            <p>Search for your favorite cocktail</p>
                         </div>
                     `;
                     return;
@@ -860,7 +792,7 @@
                     document.getElementById('search-results').innerHTML = `
                         <div class="loading">
                             <div class="spinner"></div>
-                            Suche läuft...
+                            Searching...
                         </div>
                     `;
 
@@ -882,7 +814,7 @@
             document.getElementById('search-results').innerHTML = `
                 <div class="empty-state">
                     <div class="empty-icon">🔍</div>
-                    <p>Suche nach deinem Lieblings-Cocktail</p>
+                    <p>Search for your favorite cocktail</p>
                 </div>
             `;
         }
@@ -933,85 +865,50 @@
             }
         }
 
-        // Language Functions
-        function setLanguage(lang) {
-            AppState.language = lang;
-            localStorage.setItem('dailydrinks-language', lang);
+        // Drink Detail Modal
+        async function showDrinkDetails(drinkId) {
+            const modal = document.getElementById('drink-modal');
+            const detailsContainer = document.getElementById('modal-drink-details');
             
-            // Update active language option
-            document.querySelectorAll('.language-option').forEach(option => {
-                option.classList.remove('active');
-            });
-            document.querySelector(`[onclick="setLanguage('${lang}')"]`).classList.add('active');
-            
-            // Update text content based on language
-            updateLanguageTexts(lang);
-        }
+            modal.classList.add('active');
+            detailsContainer.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Loading details...
+                </div>
+            `;
 
-        function updateLanguageTexts(lang) {
-            const texts = {
-                de: {
-                    title: 'DailyDrinks',
-                    dailyDrink: 'Drink des Tages',
-                    dailySubtitle: 'Entdecke jeden Tag einen neuen Cocktail',
-                    searchPlaceholder: 'Cocktail suchen...',
-                    searchEmpty: 'Suche nach deinem Lieblings-Cocktail',
-                    favoritesEmpty: 'Noch keine Favoriten gespeichert',
-                    noResults: 'Keine Cocktails gefunden'
-                },
-                en: {
-                    title: 'DailyDrinks',
-                    dailyDrink: 'Drink of the Day',
-                    dailySubtitle: 'Discover a new cocktail every day',
-                    searchPlaceholder: 'Search cocktails...',
-                    searchEmpty: 'Search for your favorite cocktail',
-                    favoritesEmpty: 'No favorites saved yet',
-                    noResults: 'No cocktails found'
-                },
-                es: {
-                    title: 'DailyDrinks',
-                    dailyDrink: 'Cóctel del Día',
-                    dailySubtitle: 'Descubre un nuevo cóctel cada día',
-                    searchPlaceholder: 'Buscar cócteles...',
-                    searchEmpty: 'Busca tu cóctel favorito',
-                    favoritesEmpty: 'Aún no hay favoritos guardados',
-                    noResults: 'No se encontraron cócteles'
-                },
-                fr: {
-                    title: 'DailyDrinks',
-                    dailyDrink: 'Cocktail du Jour',
-                    dailySubtitle: 'Découvrez un nouveau cocktail chaque jour',
-                    searchPlaceholder: 'Rechercher des cocktails...',
-                    searchEmpty: 'Recherchez votre cocktail préféré',
-                    favoritesEmpty: 'Aucun favori enregistré',
-                    noResults: 'Aucun cocktail trouvé'
-                },
-                it: {
-                    title: 'DailyDrinks',
-                    dailyDrink: 'Cocktail del Giorno',
-                    dailySubtitle: 'Scopri un nuovo cocktail ogni giorno',
-                    searchPlaceholder: 'Cerca cocktail...',
-                    searchEmpty: 'Cerca il tuo cocktail preferito',
-                    favoritesEmpty: 'Nessun preferito salvato',
-                    noResults: 'Nessun cocktail trovato'
-                },
-                pt: {
-                    title: 'DailyDrinks',
-                    dailyDrink: 'Drink do Dia',
-                    dailySubtitle: 'Descubra um novo cocktail todos os dias',
-                    searchPlaceholder: 'Buscar cocktails...',
-                    searchEmpty: 'Procure seu cocktail favorito',
-                    favoritesEmpty: 'Nenhum favorito salvo ainda',
-                    noResults: 'Nenhum cocktail encontrado'
-                }
-            };
-
-            const currentTexts = texts[lang] || texts.de;
-            
-            // Update page texts
-            document.querySelector('.hero-title').textContent = currentTexts.dailyDrink;
-            document.querySelector('.hero-subtitle').textContent = currentTexts.dailySubtitle;
-            document.querySelector('#search-input').placeholder = currentTexts.searchPlaceholder;
+            const rawDrink = await CocktailService.getDrinkById(drinkId);
+            if (rawDrink) {
+                const drink = formatDrink(rawDrink);
+                const isFav = isFavorite(drink.id);
+                
+                detailsContainer.innerHTML = `
+                    <img src="${drink.image}" alt="${drink.name}" style="width: 100%; border-radius: 15px; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h2>${drink.name}</h2>
+                        <button class="favorite-btn ${isFav ? 'active' : ''}" 
+                                data-drink-id="${drink.id}" 
+                                onclick="toggleFavorite(${JSON.stringify(drink).replace(/"/g, '&quot;')})">
+                            ${isFav ? '❤️' : '🤍'}
+                        </button>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">${drink.category} • ${drink.alcoholic} • ${drink.glass}</p>
+                    
+                    <h3 style="margin-bottom: 0.5rem;">Ingredients:</h3>
+                    <div class="ingredients-list">
+                        ${drink.ingredients.map(ing => `
+                            <div class="ingredient-item">
+                                <span>${ing.name}</span>
+                                <span>${ing.measure}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <h3 style="margin: 1rem 0 0.5rem 0;">Instructions:</h3>
+                    <p style="line-height: 1.6;">${drink.instructions}</p>
+                `;
+            }
         }
 
         function closeDrinkModal() {
@@ -1035,10 +932,6 @@
             // Set initial theme
             document.documentElement.setAttribute('data-theme', AppState.theme);
             document.querySelector('.theme-toggle').innerHTML = AppState.theme === 'dark' ? '☀️' : '🌙';
-            
-            // Set initial language
-            updateLanguageTexts(AppState.language);
-            document.querySelector(`[onclick="setLanguage('${AppState.language}')"]`).classList.add('active');
             
             // Setup search
             setupSearch();
