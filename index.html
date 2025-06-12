@@ -9,24 +9,28 @@
             /* Light Theme */
             --primary-bg: #f8f9fa;
             --secondary-bg: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.25);
+            --nav-bg: #e8e9ea;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-strong: rgba(255, 255, 255, 0.35);
             --text-primary: #1a1a1a;
             --text-secondary: #6b7280;
             --accent: #007AFF;
             --accent-hover: #0056CC;
-            --border: rgba(0, 0, 0, 0.1);
+            --border: rgba(0, 0, 0, 0.08);
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            --backdrop-blur: blur(20px);
+            --backdrop-blur: blur(25px);
         }
 
         [data-theme="dark"] {
             /* Dark Theme */
             --primary-bg: #000000;
             --secondary-bg: #1c1c1e;
-            --glass-bg: rgba(28, 28, 30, 0.7);
+            --nav-bg: #0a0a0a;
+            --glass-bg: rgba(28, 28, 30, 0.4);
+            --glass-strong: rgba(28, 28, 30, 0.8);
             --text-primary: #ffffff;
             --text-secondary: #98989d;
-            --border: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.08);
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
@@ -49,20 +53,22 @@
             max-width: 430px;
             margin: 0 auto;
             min-height: 100vh;
-            background: var(--secondary-bg);
+            background: linear-gradient(to bottom, var(--primary-bg), var(--secondary-bg), var(--primary-bg));
             position: relative;
             box-shadow: var(--shadow);
         }
 
         /* Header */
         .header {
-            background: var(--glass-bg);
+            background: var(--nav-bg);
             backdrop-filter: var(--backdrop-blur);
             padding: 1rem;
             position: sticky;
             top: 0;
             z-index: 100;
             border-bottom: 1px solid var(--border);
+            border-radius: 0 0 25px 25px;
+            margin: 0 0.5rem;
         }
 
         .header h1 {
@@ -107,7 +113,7 @@
 
         /* Drink Cards */
         .drink-card {
-            background: var(--glass-bg);
+            background: var(--glass-strong);
             backdrop-filter: var(--backdrop-blur);
             border-radius: 20px;
             border: 1px solid var(--border);
@@ -116,6 +122,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .drink-card:hover {
@@ -159,8 +166,8 @@
         .favorite-btn {
             position: absolute;
             top: 1rem;
-            right: 1rem;
-            background: var(--glass-bg);
+            left: 1rem;
+            background: var(--glass-strong);
             backdrop-filter: var(--backdrop-blur);
             border: none;
             border-radius: 50%;
@@ -172,6 +179,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .favorite-btn:hover {
@@ -185,28 +193,58 @@
         /* Search */
         .search-container {
             margin-bottom: 2rem;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 1rem;
-            background: var(--glass-bg);
-            backdrop-filter: var(--backdrop-blur);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            font-size: 1rem;
-            color: var(--text-primary);
-            outline: none;
+            position: sticky;
+            top: 5rem;
+            z-index: 90;
             transition: all 0.3s ease;
         }
 
-        .search-input::placeholder {
-            color: var(--text-secondary);
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: var(--glass-strong);
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 0 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .search-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        .search-icon {
+            margin-right: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem 0;
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .search-clear {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.25rem;
+            margin-left: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .search-clear.visible {
+            display: block;
+        }
+
+        .search-clear:hover {
+            background: var(--glass-bg);
         }
 
         /* Bottom Navigation */
@@ -217,13 +255,15 @@
             transform: translateX(-50%);
             width: 100%;
             max-width: 430px;
-            background: var(--glass-bg);
+            background: var(--nav-bg);
             backdrop-filter: var(--backdrop-blur);
             border-top: 1px solid var(--border);
             padding: 1rem;
             display: flex;
             justify-content: space-around;
             z-index: 100;
+            border-radius: 25px 25px 0 0;
+            margin: 0 0.5rem;
         }
 
         .nav-item {
@@ -277,13 +317,14 @@
         /* Hero Section */
         .hero-section {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
         }
 
         .hero-title {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 800;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             background: linear-gradient(135deg, var(--accent), #ff3b30);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -291,23 +332,59 @@
 
         .hero-subtitle {
             color: var(--text-secondary);
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
         }
 
-        .refresh-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            font-weight: 600;
+        /* Language Settings */
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .language-option {
+            background: var(--glass-strong);
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-align: center;
         }
 
-        .refresh-btn:hover {
-            background: var(--accent-hover);
+        .language-option:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .language-option.active {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+        }
+
+        .language-flag {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .language-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+
+        .profile-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
         }
 
         /* Empty State */
@@ -423,7 +500,6 @@
                 <div class="hero-section">
                     <h2 class="hero-title">Drink des Tages</h2>
                     <p class="hero-subtitle">Entdecke jeden Tag einen neuen Cocktail</p>
-                    <button class="refresh-btn" onclick="loadRandomDrink()">Neuen Drink laden</button>
                 </div>
                 <div id="daily-drink-container">
                     <div class="loading">
@@ -436,7 +512,11 @@
             <!-- Search Tab -->
             <div class="tab-content" id="search-tab">
                 <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Cocktail suchen..." id="search-input">
+                    <div class="search-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="Cocktail suchen..." id="search-input">
+                        <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+                    </div>
                 </div>
                 <div id="search-results" class="drinks-grid">
                     <div class="empty-state">
@@ -458,9 +538,42 @@
 
             <!-- Profile Tab -->
             <div class="tab-content" id="profile-tab">
-                <div class="empty-state">
-                    <div class="empty-icon">⚙️</div>
-                    <p>Profil-Features kommen bald</p>
+                <div class="profile-section">
+                    <h3 class="profile-title">🌍 Sprache</h3>
+                    <div class="language-grid">
+                        <div class="language-option active" onclick="setLanguage('de')">
+                            <span class="language-flag">🇩🇪</span>
+                            <div class="language-name">Deutsch</div>
+                        </div>
+                        <div class="language-option" onclick="setLanguage('en')">
+                            <span class="language-flag">🇺🇸</span>
+                            <div class="language-name">English</div>
+                        </div>
+                        <div class="language-option" onclick="setLanguage('es')">
+                            <span class="language-flag">🇪🇸</span>
+                            <div class="language-name">Español</div>
+                        </div>
+                        <div class="language-option" onclick="setLanguage('fr')">
+                            <span class="language-flag">🇫🇷</span>
+                            <div class="language-name">Français</div>
+                        </div>
+                        <div class="language-option" onclick="setLanguage('it')">
+                            <span class="language-flag">🇮🇹</span>
+                            <div class="language-name">Italiano</div>
+                        </div>
+                        <div class="language-option" onclick="setLanguage('pt')">
+                            <span class="language-flag">🇵🇹</span>
+                            <div class="language-name">Português</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-section">
+                    <h3 class="profile-title">⚙️ Einstellungen</h3>
+                    <div class="empty-state">
+                        <div class="empty-icon">🚧</div>
+                        <p>Weitere Features kommen bald</p>
+                    </div>
                 </div>
             </div>
         </main>
@@ -501,7 +614,10 @@
             favorites: JSON.parse(localStorage.getItem('dailydrinks-favorites') || '[]'),
             currentDrink: null,
             searchResults: [],
-            theme: localStorage.getItem('dailydrinks-theme') || 'light'
+            theme: localStorage.getItem('dailydrinks-theme') || 'light',
+            language: localStorage.getItem('dailydrinks-language') || 'de',
+            dailyDrink: JSON.parse(localStorage.getItem('dailydrinks-daily') || 'null'),
+            dailyDrinkDate: localStorage.getItem('dailydrinks-daily-date') || ''
         };
 
         // API Service
@@ -629,7 +745,6 @@
                     <div class="empty-state">
                         <div class="empty-icon">😔</div>
                         <p>Cocktail konnte nicht geladen werden</p>
-                        <button class="refresh-btn" onclick="loadRandomDrink()">Erneut versuchen</button>
                     </div>
                 `;
             }
@@ -684,19 +799,34 @@
             }
         }
 
-        // Load Random Drink
-        async function loadRandomDrink() {
+        // Load Daily Drink (once per day)
+        async function loadDailyDrink() {
+            const today = new Date().toDateString();
+            
+            // Check if we already have today's drink
+            if (AppState.dailyDrinkDate === today && AppState.dailyDrink) {
+                renderDailyDrink(AppState.dailyDrink);
+                return;
+            }
+
             const container = document.getElementById('daily-drink-container');
             container.innerHTML = `
                 <div class="loading">
                     <div class="spinner"></div>
-                    Lade neuen Cocktail...
+                    Lade Cocktail des Tages...
                 </div>
             `;
 
             const rawDrink = await CocktailService.getRandomDrink();
             if (rawDrink) {
                 const drink = formatDrink(rawDrink);
+                AppState.dailyDrink = drink;
+                AppState.dailyDrinkDate = today;
+                
+                // Save to localStorage
+                localStorage.setItem('dailydrinks-daily', JSON.stringify(drink));
+                localStorage.setItem('dailydrinks-daily-date', today);
+                
                 renderDailyDrink(drink);
             } else {
                 renderDailyDrink(null);
@@ -707,9 +837,14 @@
         let searchTimeout;
         function setupSearch() {
             const searchInput = document.getElementById('search-input');
+            const clearButton = document.getElementById('search-clear');
+            
             searchInput.addEventListener('input', (e) => {
                 clearTimeout(searchTimeout);
                 const query = e.target.value.trim();
+                
+                // Show/hide clear button
+                clearButton.classList.toggle('visible', query.length > 0);
                 
                 if (query.length === 0) {
                     document.getElementById('search-results').innerHTML = `
@@ -735,6 +870,21 @@
                     renderSearchResults(drinks);
                 }, 300);
             });
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('search-input');
+            const clearButton = document.getElementById('search-clear');
+            
+            searchInput.value = '';
+            clearButton.classList.remove('visible');
+            
+            document.getElementById('search-results').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">🔍</div>
+                    <p>Suche nach deinem Lieblings-Cocktail</p>
+                </div>
+            `;
         }
 
         // Drink Detail Modal
@@ -783,6 +933,87 @@
             }
         }
 
+        // Language Functions
+        function setLanguage(lang) {
+            AppState.language = lang;
+            localStorage.setItem('dailydrinks-language', lang);
+            
+            // Update active language option
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`[onclick="setLanguage('${lang}')"]`).classList.add('active');
+            
+            // Update text content based on language
+            updateLanguageTexts(lang);
+        }
+
+        function updateLanguageTexts(lang) {
+            const texts = {
+                de: {
+                    title: 'DailyDrinks',
+                    dailyDrink: 'Drink des Tages',
+                    dailySubtitle: 'Entdecke jeden Tag einen neuen Cocktail',
+                    searchPlaceholder: 'Cocktail suchen...',
+                    searchEmpty: 'Suche nach deinem Lieblings-Cocktail',
+                    favoritesEmpty: 'Noch keine Favoriten gespeichert',
+                    noResults: 'Keine Cocktails gefunden'
+                },
+                en: {
+                    title: 'DailyDrinks',
+                    dailyDrink: 'Drink of the Day',
+                    dailySubtitle: 'Discover a new cocktail every day',
+                    searchPlaceholder: 'Search cocktails...',
+                    searchEmpty: 'Search for your favorite cocktail',
+                    favoritesEmpty: 'No favorites saved yet',
+                    noResults: 'No cocktails found'
+                },
+                es: {
+                    title: 'DailyDrinks',
+                    dailyDrink: 'Cóctel del Día',
+                    dailySubtitle: 'Descubre un nuevo cóctel cada día',
+                    searchPlaceholder: 'Buscar cócteles...',
+                    searchEmpty: 'Busca tu cóctel favorito',
+                    favoritesEmpty: 'Aún no hay favoritos guardados',
+                    noResults: 'No se encontraron cócteles'
+                },
+                fr: {
+                    title: 'DailyDrinks',
+                    dailyDrink: 'Cocktail du Jour',
+                    dailySubtitle: 'Découvrez un nouveau cocktail chaque jour',
+                    searchPlaceholder: 'Rechercher des cocktails...',
+                    searchEmpty: 'Recherchez votre cocktail préféré',
+                    favoritesEmpty: 'Aucun favori enregistré',
+                    noResults: 'Aucun cocktail trouvé'
+                },
+                it: {
+                    title: 'DailyDrinks',
+                    dailyDrink: 'Cocktail del Giorno',
+                    dailySubtitle: 'Scopri un nuovo cocktail ogni giorno',
+                    searchPlaceholder: 'Cerca cocktail...',
+                    searchEmpty: 'Cerca il tuo cocktail preferito',
+                    favoritesEmpty: 'Nessun preferito salvato',
+                    noResults: 'Nessun cocktail trovato'
+                },
+                pt: {
+                    title: 'DailyDrinks',
+                    dailyDrink: 'Drink do Dia',
+                    dailySubtitle: 'Descubra um novo cocktail todos os dias',
+                    searchPlaceholder: 'Buscar cocktails...',
+                    searchEmpty: 'Procure seu cocktail favorito',
+                    favoritesEmpty: 'Nenhum favorito salvo ainda',
+                    noResults: 'Nenhum cocktail encontrado'
+                }
+            };
+
+            const currentTexts = texts[lang] || texts.de;
+            
+            // Update page texts
+            document.querySelector('.hero-title').textContent = currentTexts.dailyDrink;
+            document.querySelector('.hero-subtitle').textContent = currentTexts.dailySubtitle;
+            document.querySelector('#search-input').placeholder = currentTexts.searchPlaceholder;
+        }
+
         function closeDrinkModal() {
             document.getElementById('drink-modal').classList.remove('active');
         }
@@ -805,11 +1036,15 @@
             document.documentElement.setAttribute('data-theme', AppState.theme);
             document.querySelector('.theme-toggle').innerHTML = AppState.theme === 'dark' ? '☀️' : '🌙';
             
+            // Set initial language
+            updateLanguageTexts(AppState.language);
+            document.querySelector(`[onclick="setLanguage('${AppState.language}')"]`).classList.add('active');
+            
             // Setup search
             setupSearch();
             
-            // Load initial data
-            loadRandomDrink();
+            // Load daily drink
+            loadDailyDrink();
             
             // Close modal on outside click
             document.getElementById('drink-modal').addEventListener('click', (e) => {
